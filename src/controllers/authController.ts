@@ -2,6 +2,7 @@ import { Request, Response } from 'express';
 import { pool } from '../db';
 export const registerUser = async (req: Request, res: Response) => {
   const { name, email, password } = req.body;
+
   try {
     const result = await pool.query(
       `INSERT INTO users (name, email, password)
