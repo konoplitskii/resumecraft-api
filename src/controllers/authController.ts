@@ -25,12 +25,16 @@ export const registerUser = async (req: Request, res: Response) => {
     );
 
     res.status(201).json({
+      success: true,
       message: 'Пользователь успешно создан',
-      result: true,
       data: result.rows[0],
     });
   } catch (err: any) {
     console.error('Ошибка при создании пользователя:', err);
-    res.status(500).json({ error: 'Внутренняя ошибка сервера', details: err.message });
+    res.status(500).json({
+      success: false,
+      message: 'Внутренняя ошибка сервера',
+      error: err.message,
+    });
   }
 };
