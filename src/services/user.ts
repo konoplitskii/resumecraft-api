@@ -1,7 +1,8 @@
 import bcrypt from 'bcryptjs';
 import { pool } from '../db';
+import { IUser } from '../types/user.types';
 
-export const getUserByEmail = async (email: string) => {
+export const getUserByEmail = async (email: string): Promise<IUser | null> => {
   const { rows } = await pool.query(`SELECT * FROM users WHERE email = $1`, [email]);
   return rows[0] || null;
 };
