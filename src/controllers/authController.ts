@@ -20,9 +20,9 @@ export const registerUser = async (req: Request, res: Response) => {
     const hashedPassword = await bcrypt.hash(String(password), 10);
 
     const result = await pool.query(
-      `INSERT INTO users (name, email, password)
+      `INSERT INTO users (full_name, email, password_hash)
        VALUES ($1, $2, $3)
-       RETURNING id, name, email, created_at;`,
+       RETURNING id, full_name, email, created_at;`,
       [name, email, hashedPassword],
     );
 
@@ -56,7 +56,7 @@ export const loginUser = async (req: Request, res: Response) => {
     });
   }
 
-  const isPasswordValid = await comparePassword(password, existingUser.password);
+  const isPasswordValid = await comparePassword(password, existingUser.password_hash);
 
   if (!isPasswordValid) {
     return res.status(400).json({
@@ -66,7 +66,7 @@ export const loginUser = async (req: Request, res: Response) => {
     });
   }
 
-  const token = jwt.sign({ userId: existingUser.id, name: existingUser.name }, JWT_SECRET, {
+  const token = jwt.sign({ userId: existingUser.id, name: existingUser.full_name }, JWT_SECRET, {
     expiresIn: expiresIn,
   });
 
@@ -83,7 +83,7 @@ export const loginUser = async (req: Request, res: Response) => {
     data: {
       user: {
         id: existingUser.id,
-        name: existingUser.name,
+        name: existingUser.full_name,
         email: existingUser.email,
       },
     },

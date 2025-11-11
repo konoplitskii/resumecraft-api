@@ -19,6 +19,7 @@ async function startServer() {
     console.log('✅ Connected to database at:', result.rows[0].now);
 
     app.listen(PORT, () => {
+      // createResumeTables();
       console.log(`🚀 Server is running on http://localhost:${PORT}`);
     });
   } catch (err) {
